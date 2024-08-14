@@ -1,17 +1,22 @@
 package com.market.order;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.ToString;
-
-import java.util.UUID;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Builder
-@ToString
-@Data
+@Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "orders")
 public class Order {
 
-    private UUID orderId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long orderId;
     private String userId;
     private String orderStatus; //enum 사용
     private String errorType;

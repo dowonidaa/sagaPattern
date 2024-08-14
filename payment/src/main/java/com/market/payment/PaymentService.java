@@ -14,24 +14,25 @@ import java.util.UUID;
 public class PaymentService {
 
     private final RabbitTemplate rabbitTemplate;
+    private final PaymentRepository paymentRepository;
 
     @Value("${message.queue.err.product}")
     private String queueErrProduct;
 
     public void createPayment(DeliveryMessage deliveryMessage) {
         Payment payment = Payment.builder()
-                    .paymentId(UUID.randomUUID())
                     .userId(deliveryMessage.getUserId())
                     .payAmount(deliveryMessage.getPayAmount())
                     .payStatus("success")
                 .build();
-
         Integer payAmount = payment.getPayAmount();
         if (payAmount > 10000) {
             log.error("Payment amount exceeds limit: {}", payAmount);
             deliveryMessage.setErrorType("PAYMENT_LIMIT_EXCEEDED");
             this.rollbackPayment(deliveryMessage);
+            return;
         }
+        paymentRepository.save(payment);
     }
 
     public void rollbackPayment(DeliveryMessage deliveryMessage) {

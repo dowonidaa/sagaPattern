@@ -18,7 +18,7 @@ public class OrderEndPoint {
     private final OrderService orderService;
 
     @GetMapping("/order/{orderId}")
-    public ResponseEntity<Order> getOrder(@PathVariable("orderId") UUID orderId) {
+    public ResponseEntity<Order> getOrder(@PathVariable("orderId") Long orderId) {
         Order order = orderService.getOrder(orderId);
         return ResponseEntity.ok(order);
     }
@@ -39,19 +39,18 @@ public class OrderEndPoint {
     @Data
     public static class OrderRequestDto{
         private String userId;
-        private Integer productId;
+        private Long productId;
         private Integer productQuantity;
         private Integer payAmount;
 
         public Order toOrder() {
             return Order.builder()
-                    .orderId(UUID.randomUUID())
                     .userId(userId)
                     .orderStatus("RECEIPT")
                     .build();
         }
 
-        public DeliveryMessage toDeliveryMessage(UUID orderId) {
+        public DeliveryMessage toDeliveryMessage(Long orderId) {
             return DeliveryMessage.builder()
                     .orderId(orderId)
                     .userId(userId)

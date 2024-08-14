@@ -12,12 +12,12 @@ import java.util.UUID;
 @Builder
 public class DeliveryMessage {
 
-    private UUID orderId;
-    private UUID paymentId;
+    private Long orderId;
+    private Long paymentId;
 
     private String userId;
 
-    private Integer productId;
+    private Long productId;
     private Integer productQuantity;
 
     private Integer payAmount;
