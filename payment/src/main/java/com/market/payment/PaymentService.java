@@ -20,11 +20,7 @@ public class PaymentService {
     private String queueErrProduct;
 
     public void createPayment(DeliveryMessage deliveryMessage) {
-        Payment payment = Payment.builder()
-                    .userId(deliveryMessage.getUserId())
-                    .payAmount(deliveryMessage.getPayAmount())
-                    .payStatus("success")
-                .build();
+        Payment payment = toEntity(deliveryMessage);
         Integer payAmount = payment.getPayAmount();
         if (payAmount > 10000) {
             log.error("Payment amount exceeds limit: {}", payAmount);
@@ -33,6 +29,14 @@ public class PaymentService {
             return;
         }
         paymentRepository.save(payment);
+    }
+
+    private Payment toEntity(DeliveryMessage deliveryMessage) {
+        return Payment.builder()
+                .userId(deliveryMessage.getUserId())
+                .payAmount(deliveryMessage.getPayAmount())
+                .payStatus("success")
+                .build();
     }
 
     public void rollbackPayment(DeliveryMessage deliveryMessage) {
