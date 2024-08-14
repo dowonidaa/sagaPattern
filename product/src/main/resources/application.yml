@@ -15,7 +15,7 @@ message:
     payment: market.payment
     err:
       product: market.err.product
-      order: market.order
+      order: market.err.order
   err:
     exchange: market.err
 

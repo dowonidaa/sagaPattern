@@ -30,4 +30,9 @@ public class OrderService {
     public Order getOrder(UUID orderId) {
         return orderRepository.getOrder(orderId);
     }
+
+    public void rollbackOrder(DeliveryMessage deliveryMessage) {
+        Order order = orderRepository.getOrder(deliveryMessage.getOrderId());
+        order.cancelOrder(deliveryMessage.getErrorType());
+    }
 }

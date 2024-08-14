@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,12 @@ public class OrderEndPoint {
     public ResponseEntity<Order> order(@RequestBody OrderRequestDto orderRequestDto) {
         Order order = orderService.createOrder(orderRequestDto);
         return ResponseEntity.ok(order);
+    }
+
+    @RabbitListener(queues = "${message.queue.err.order}")
+    public void receiveErrorMessage(DeliveryMessage deliveryMessage) {
+        log.info("ERROR RECEIVE: {}", deliveryMessage);
+        orderService.rollbackOrder(deliveryMessage);
     }
 
 
