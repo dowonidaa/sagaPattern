@@ -1,7 +1,5 @@
 package com.market.order;
 
-import org.springframework.stereotype.Repository;
-
 import java.util.HashMap;
 import java.util.Map;
 
